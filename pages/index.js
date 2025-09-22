@@ -7,23 +7,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function analyze() {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url })
-      });
-      if (!res.ok) throw new Error(res.status);
-      const json = await res.json();
-      setScore(json);
-    } catch (err) {
-      console.error(err);
-      setScore({ Experience: 0, Expertise: 0, Authoritativeness: 0, Trustworthiness: 0 });
-    } finally {
-      setLoading(false);
-    }
+  setLoading(true);
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+    const json = await res.json();        // ← always parse
+    setScore(json);
+  } catch (err) {
+    console.error(err);
+    setScore({ Experience: 0, Expertise: 0, Authoritativeness: 0, Trustworthiness: 0 });
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
