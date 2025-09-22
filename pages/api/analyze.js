@@ -1,11 +1,12 @@
 // pages/api/analyze.js
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { url } = JSON.parse(req.body);
+    const body = JSON.parse(req.body);        // parse body first
+    const url  = body.url;
+    if (!url) throw new Error('missing url');
+
     const hostname = new URL(url).hostname;
 
     // OpenPageRank live call
@@ -24,6 +25,13 @@ export default async function handler(req, res) {
       Trustworthiness: url.startsWith('https') ? 100 : 0
     });
   } catch (e) {
-    res.status(400).json({ error: 'Bad request' });
+    // always return JSON (never empty)
+    res.status(400).json({
+      Experience: 0,
+      Expertise: 0,
+      Authoritativeness: 0,
+      Trustworthiness: 0,
+      debug: e.message
+    });
   }
 }
