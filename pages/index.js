@@ -12,10 +12,10 @@ export default function Home() {
     const res = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url })
+      body: JSON.stringify({ url })   // single stringify only
     });
-    const json = await res.json();        // ← always parse
-    setScore(json);
+    const data = await res.json();
+    setScore(data);
   } catch (err) {
     console.error(err);
     setScore({ Experience: 0, Expertise: 0, Authoritativeness: 0, Trustworthiness: 0 });
@@ -23,7 +23,6 @@ export default function Home() {
     setLoading(false);
   }
 }
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
