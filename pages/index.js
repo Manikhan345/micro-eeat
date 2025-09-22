@@ -7,22 +7,25 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function analyze() {
-  setLoading(true);
-  try {
-    const res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url })   // single stringify only
-    });
-    const data = await res.json();
-    setScore(data);
-  } catch (err) {
-    console.error(err);
-    setScore({ Experience: 0, Expertise: 0, Authoritativeness: 0, Trustworthiness: 0 });
-  } finally {
-    setLoading(false);
+    if (!url) return;
+    setLoading(true);
+    try {
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      if (!res.ok) throw new Error('API error ' + res.status);
+      const data = await res.json();
+      setScore(data);
+    } catch (err) {
+      console.error(err);
+      setScore({ Experience: 0, Expertise: 0, Authoritativeness: 0, Trustworthiness: 0, debug: err.message });
+    } finally {
+      setLoading(false);
+    }
   }
-}
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
