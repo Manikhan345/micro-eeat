@@ -6,12 +6,16 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function analyze() {
-    setLoading(true);
-    const res = await fetch('/api/analyze', { method: 'POST', body: url });
-    const json = await res.json();
-    setScore(json);
-    setLoading(false);
-  }
+  setLoading(true);
+  const res = await fetch('/api/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url })   // ← wrap in JSON
+  });
+  const json = await res.json();
+  setScore(json);
+  setLoading(false);
+}
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
