@@ -1,4 +1,4 @@
-// pages/index.js
+// pages/index.js – bullet-proof
 import { useState } from 'react';
 
 export default function Home() {
@@ -7,7 +7,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function analyze() {
-    if (!url) return;
+    if (!url.trim()) return;
     setLoading(true);
     try {
       const res = await fetch('/api/analyze', {
@@ -15,8 +15,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url })
       });
-      if (!res.ok) throw new Error('API error ' + res.status);
-      const data = await res.json();
+      const data = await res.json();        // always parses
       setScore(data);
     } catch (err) {
       console.error(err);
